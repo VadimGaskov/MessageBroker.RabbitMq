@@ -9,7 +9,9 @@ using RabbitMQ.Client.Events;
 
 namespace MessageBroker.RabbitMQ.Consumer;
 
-//TODO Внедрить RabbitMqConsumerSettings
+/// <summary>
+/// Фоновый сервис для потребления сообщений из RabbitMQ. Обрабатывает события через зарегистрированные обработчики.
+/// </summary>
 public class RabbitMqConsumerService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
@@ -18,6 +20,13 @@ public class RabbitMqConsumerService : BackgroundService
     private readonly RabbitMqConsumerSettings _rabbitMqConsumerSettings;
     private readonly RabbitMqConnectionManager _rabbitMqConnectionManager;
     
+    /// <summary>
+    /// Инициализирует новый экземпляр класса <see cref="RabbitMqConsumerService"/>.
+    /// </summary>
+    /// <param name="serviceProvider">Провайдер сервисов для создания обработчиков событий.</param>
+    /// <param name="routes">Словарь маршрутизации типов событий к конфигурациям очередей.</param>
+    /// <param name="rabbitMqConsumerSettings">Настройки потребителя RabbitMQ.</param>
+    /// <param name="rabbitMqConnectionManager">Менеджер подключений к RabbitMQ.</param>
     public RabbitMqConsumerService(IServiceProvider serviceProvider, IReadOnlyDictionary<Type, 
         QueueBindingConfig> routes, IOptions<RabbitMqConsumerSettings> rabbitMqConsumerSettings, RabbitMqConnectionManager rabbitMqConnectionManager)
     {
@@ -26,6 +35,11 @@ public class RabbitMqConsumerService : BackgroundService
         _rabbitMqConnectionManager = rabbitMqConnectionManager;
         _rabbitMqConsumerSettings = rabbitMqConsumerSettings.Value;
     }
+    /// <summary>
+    /// Выполняет фоновую задачу по потреблению сообщений из RabbitMQ.
+    /// Создаёт каналы для каждой зарегистрированной очереди и начинает прослушивание сообщений.
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены для остановки выполнения.</param>
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var connection = await _rabbitMqConnectionManager.GetConnectionAsync(cancellationToken);
@@ -74,6 +88,13 @@ public class RabbitMqConsumerService : BackgroundService
         }
     }
 
+    /// <summary>
+    /// Обрабатывает полученное сообщение: десериализует его, находит обработчик и выполняет его.
+    /// </summary>
+    /// <param name="type">Тип события для десериализации.</param>
+    /// <param name="ea">Аргументы доставки сообщения от RabbitMQ.</param>
+    /// <param name="channel">Канал RabbitMQ для подтверждения или отклонения сообщения.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
     private async Task HandleMessage(Type type, BasicDeliverEventArgs ea, IChannel channel, CancellationToken cancellationToken)
     {
         var json = Encoding.UTF8.GetString(ea.Body.ToArray());
@@ -107,6 +128,10 @@ public class RabbitMqConsumerService : BackgroundService
         }
     }
 
+    /// <summary>
+    /// Останавливает сервис и закрывает все открытые каналы RabbitMQ.
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         foreach (var channel in _channels)
@@ -125,6 +150,9 @@ public class RabbitMqConsumerService : BackgroundService
         await base.StopAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Освобождает все ресурсы, включая каналы RabbitMQ.
+    /// </summary>
     public override void Dispose()
     {
         // Channels уже закрыты в StopAsync, но на всякий случай:

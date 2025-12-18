@@ -6,10 +6,12 @@
         <Nullable>enable</Nullable>
 
         <PackageId>MessageBroker.RabbitMQ</PackageId>
-        <Version>1.0.0</Version>
+        <!-- Из-за кривого залития и конфликта версий начинается с 2. -->
+        <Version>2.0.0</Version>
         <Authors>Vadim</Authors>
         <PackageDescription>Реализация RabbitMQ для работы с брокером сообщений</PackageDescription>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
