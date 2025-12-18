@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
 
         <PackageId>MessageBroker.RabbitMQ</PackageId>
-        <Version>1.0.9</Version>
+        <Version>1.0.0</Version>
         <Authors>Vadim</Authors>
         <PackageDescription>Реализация RabbitMQ для работы с брокером сообщений</PackageDescription>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
