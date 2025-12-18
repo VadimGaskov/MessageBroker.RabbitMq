@@ -5,8 +5,15 @@ using RabbitMQ.Client;
 
 namespace MessageBroker.RabbitMQ.Registration;
 
+/// <summary>
+/// Регистратор подключений к RabbitMQ в DI-контейнере.
+/// </summary>
 public static class ConnectionRegistrar
 {
+    /// <summary>
+    /// Регистрирует фабрику подключений к RabbitMQ в коллекции сервисов.
+    /// </summary>
+    /// <param name="services">Коллекция сервисов для регистрации.</param>
     public static void Register(IServiceCollection services)
     {
         services.AddSingleton<IConnectionFactory>(sp =>
