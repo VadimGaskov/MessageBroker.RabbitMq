@@ -36,7 +36,7 @@ public class ConsumerRoutingBuilder
         string exchange,
         string routingKey,
         bool durable = true,
-        IDictionary<string, object>? arguments = null) where TEvent : IDomainEvent
+        IDictionary<string, object>? arguments = null) where TEvent : IIntegrationEvent
     {
         var finalQueueName = _defaultQueuePrefix != null
             ? $"{_defaultQueuePrefix}.{queueName}"

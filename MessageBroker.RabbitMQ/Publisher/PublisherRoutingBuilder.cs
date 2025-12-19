@@ -32,7 +32,7 @@ public class PublisherRoutingBuilder
     public PublisherRoutingBuilder Map<TEvent>(
         string exchange, 
         string routingKey, 
-        string exchangeType = "topic") where TEvent : IDomainEvent
+        string exchangeType = "topic") where TEvent : IIntegrationEvent
     {
         var finalExchange = _defaultExchangePrefix != null 
             ? $"{_defaultExchangePrefix}.{exchange}" 

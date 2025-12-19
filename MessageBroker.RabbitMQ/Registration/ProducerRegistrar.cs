@@ -1,4 +1,5 @@
 ﻿using MessageBroker.Abstractions.Interfaces;
+using MessageBroker.Abstractions.Interfaces.Publisher;
 using MessageBroker.RabbitMQ.Consumer;
 using MessageBroker.RabbitMQ.Publisher;
 using Microsoft.Extensions.DependencyInjection;

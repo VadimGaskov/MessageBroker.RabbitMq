@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using MessageBroker.Abstractions.Interfaces;
+using MessageBroker.Abstractions.Interfaces.Publisher;
 using MessageBroker.RabbitMQ.Publisher;
 using RabbitMQ.Client;
 
@@ -33,7 +34,7 @@ public class RabbitMqPublisher : IMessageBrokerPublisher
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Задача, представляющая асинхронную операцию публикации.</returns>
     /// <exception cref="InvalidOperationException">Выбрасывается, если событие не зарегистрировано в маршрутизации.</exception>
-    public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) where TEvent : IDomainEvent
+    public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) where TEvent : IIntegrationEvent
     {
         var eventType = typeof(TEvent);
         
